@@ -59,7 +59,7 @@ class StudentPaymentController extends GetxController{
         Uri.parse(Strings.stripeAPI),
         body: body,
         headers: {
-          "Authorization" : "Bearer sk_test_51Ny7wfSDwhqjewtixUowWTMixyRHLZ5JZWgQuV1IlHRODb4dFv7DMZ3s7psvBSgOPJb4KQYQfUuh795yhaXiyIbi009Y44QVtE",
+          "Authorization" : "Bearer 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",
           "Content-type" : "application/x-www-form-urlencoded"
         }
     );
@@ -76,7 +76,7 @@ class StudentPaymentController extends GetxController{
       var res = await http.post(
         Uri.parse(Strings.paymentDoneAPI),
         body: {
-          "amount" : 100.toString(),
+          "amount" : "100",
           "referral_code": controllerReferral.text.toString(),
           "userid" : homeController.id.value.toString()
         },

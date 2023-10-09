@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medhasvinieducation/Custom/Strings.dart';
 import 'package:medhasvinieducation/Home/LiveClass/liveclass.dart';
+import 'package:medhasvinieducation/Home/PaymentTree/paymenttree.dart';
 import 'package:medhasvinieducation/Home/StudentCourse/studentcourse.dart';
 import 'package:medhasvinieducation/Home/StudentPayment/studentpayment.dart';
 import 'package:medhasvinieducation/Home/homecontroller.dart';
@@ -58,7 +60,19 @@ class Home extends StatelessWidget {
             },
             tooltip: "Search",
             icon: const Icon(Icons.search, color: Colors.black,),
-          ): const Stack())
+          ): const Stack()),
+          Obx(()=>
+            controller.currentPage.value == 2?
+            controller.isPaidUser.value == "true"?
+             IconButton(
+              onPressed: ()  {
+                controller.nodes.clear();
+                controller.getJsonPaid().then((value) => controller.getCommission(value));
+
+              },
+              tooltip: "Refresh",
+              icon: const Icon(Icons.refresh, color: Colors.black)): const Stack(): const Stack(),
+          ),
         ],
       ),
       drawer: SizedBox(
@@ -114,13 +128,14 @@ class Home extends StatelessWidget {
                                 ],
                               )),
                               const PopupMenuDivider(),
-                              PopupMenuItem(child: Row(
-                                children: [
-                                  Icon(Icons.exit_to_app_outlined, color: Colors.black.withOpacity(0.7)),
-                                  const SizedBox(width: 10),
-                                  Text("Sign out", style: TextStyle(color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w500)),
-                                ],
-                              ), onTap: controller.signOut),
+                              PopupMenuItem(onTap: controller.signOut,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.exit_to_app_outlined, color: Colors.black.withOpacity(0.7)),
+                                    const SizedBox(width: 10),
+                                    Text("Sign out", style: TextStyle(color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w500)),
+                                  ],
+                                ), ),
                             ],
                             icon: Icon(Icons.person, color: Colors.white.withOpacity(0.7))
                           ),
@@ -227,7 +242,9 @@ class Home extends StatelessWidget {
           ? const StudentCourse()
           : (controller.currentPage.value == 1)
             ? const LiveClass()
-            : const StudentPayment()
+            : (controller.isPaidUser.value=="true") ?
+            const PaymentTree():
+        const StudentPayment()
       ),
     );
   }

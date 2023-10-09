@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter_stripe:
   confetti:
+  flutter_simple_treeview:
+  clipboard:
   url_launcher:
   html_viewer_elite:
   lottie:

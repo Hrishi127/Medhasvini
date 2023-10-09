@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = "pk_test_51Ny7wfSDwhqjewtiIbelx6sJJj1Dz2K73zIjYVpKUZAMoMS1zhtFH9Q3kTGPgUxnstNj4sifm5sFnHvIHTgAxT9J00yRuwpViF";
+  Stripe.publishableKey = "pk_live_51Ny7wfSDwhqjewtiPNdQ9L7JUcJZRs5A7tsk9ULNXDsOvPR1h0RYJvbr59WeGS3krHhY3z6QZolTos5pT11PRPTI00fp4TgJoh";
   Stripe.merchantIdentifier = 'ridgeant';
   await Stripe.instance.applySettings();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
