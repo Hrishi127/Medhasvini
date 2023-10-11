@@ -32,6 +32,7 @@ dependencies:
   confetti:
   flutter_simple_treeview:
   clipboard:
+  youtube_player_flutter:
   url_launcher:
   html_viewer_elite:
   lottie:

@@ -112,7 +112,7 @@ class SignIn extends StatelessWidget {
                           height: 32,
                           child: TextButton(
                               onPressed: (){
-
+                                controller.forgot();
                               },
                               style: const ButtonStyle(),
                             child: const Text("Forgot password?", style: TextStyle(color: Colors.indigo,fontWeight: FontWeight.w700)),

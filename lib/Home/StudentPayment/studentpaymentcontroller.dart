@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
@@ -16,7 +16,7 @@ class StudentPaymentController extends GetxController{
   late SharedPreferences sharedPreferences;
   String token = "";
   Map<String, dynamic>? paymentIntent;
-  ConfettiController confettiController = ConfettiController();
+
   var homeController = Get.find<HomeController>();
 
   @override
@@ -42,7 +42,8 @@ class StudentPaymentController extends GetxController{
       Widgets.snackBar("Valid referral code");
       payment();
     }else{
-      Widgets.snackBar("Invalid referral code");
+      var json = jsonDecode(res.body);
+      Widgets.snackBar(json["message"]);
     }
   }
 
@@ -52,53 +53,68 @@ class StudentPaymentController extends GetxController{
 
     Map<String, dynamic> body = {
       "amount" : "10000",
-      "currency": "INR"
+      "currency" : "INR",
+      "receipt_email" : homeController.email.value
     };
 
     var res = await http.post(
         Uri.parse(Strings.stripeAPI),
         body: body,
         headers: {
-          "Authorization" : "Bearer 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",
+          "Authorization" : "Bearer ${Strings.secretStripe}",
           "Content-type" : "application/x-www-form-urlencoded"
         }
     );
     paymentIntent = json.decode(res.body);
-    print(paymentIntent);
+    debugPrint(paymentIntent.toString());
 
     await Stripe.instance.initPaymentSheet(paymentSheetParameters: SetupPaymentSheetParameters(
       paymentIntentClientSecret: paymentIntent!["client_secret"],
       style: ThemeMode.light,
-      merchantDisplayName: "Ridgeant"
+      merchantDisplayName: "Medhasvini Education",
+      billingDetails: BillingDetails(
+          email: homeController.email.value,
+          name: homeController.username.value
+      ),
     )).then((value) => {});
+
+    var data = json.encode({
+      "amount" : 500,
+      "referral_code": controllerReferral.text.toString(),
+      "userid" : int.parse(homeController.id.value.toString())
+    });
 
     await Stripe.instance.presentPaymentSheet().then((value) async {
       var res = await http.post(
         Uri.parse(Strings.paymentDoneAPI),
-        body: {
-          "amount" : "100",
-          "referral_code": controllerReferral.text.toString(),
-          "userid" : homeController.id.value.toString()
-        },
+        body: data,
         headers: {
+          "content-type" : "application/json",
+          "accept" : "application/json",
           "Authorization" : "Bearer $token"
         }
       );
-      debugPrint(res.body);
+      debugPrint("PaymentDone ${res.body}");
       congDialog();
     });
 
   }
 
   void congDialog() async {
-    confettiController.play();
+    homeController.confettiController.play();
     homeController.loadProfile();
     Get.dialog(
         AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          title: const Text("Congratulations!"),
+          title: const Row(
+            children: [
+              Icon(Icons.check_circle_rounded, color: Colors.green),
+              SizedBox(width: 8),
+              Text("Payment successful"),
+            ],
+          ),
           content: const Text("You are now subscribed to the Medhasvini Education app."),
           actions: [
             TextButton(onPressed: (){
@@ -108,7 +124,7 @@ class StudentPaymentController extends GetxController{
         )
     );
     await Future.delayed(const Duration(seconds: 5));
-    confettiController.stop();
+    homeController.confettiController.stop();
   }
 
 }

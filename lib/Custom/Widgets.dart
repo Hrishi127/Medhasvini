@@ -19,20 +19,20 @@ class Widgets{
           child: Material(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
-              side: const  BorderSide(color: Colors.grey)
+              side: BorderSide(color: Colors.grey.withOpacity(0.5))
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                   child: Text(userName),
                 ),
                 Material(
-                  color: Colors.grey,
+                  color: Colors.indigo,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Code:$referralCode", style: TextStyle(color: Colors.white),),
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                    child: Text(referralCode, style: TextStyle(color: Colors.white),),
                   ),
                 )
               ],

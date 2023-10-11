@@ -15,7 +15,7 @@ class CourseDetails extends StatelessWidget {
     return Scaffold(
       floatingActionButton: Obx(()=>
           Visibility(
-            visible: (controller.isAdmin.value == "true")?true:false,
+            visible: (controller.homeController.isAdmin.value == "true")?true:false,
             child: FloatingActionButton(
               onPressed: controller.addVideo,
               child: const Icon(Icons.add),
@@ -77,7 +77,7 @@ class CourseDetails extends StatelessWidget {
                                 ),
                               ),
                               Obx(()=>
-                              controller.isAdmin.value=="true"
+                              controller.homeController.isAdmin.value=="true"
                                   ? Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                                 child: Align(

@@ -49,7 +49,6 @@ class StudentCoursesController extends GetxController{
     if(res.statusCode==200){
       loading.value = false;
       courses.value = jsonDecode(res.body);
-
       images.clear();
 
       for(int i=0; i<courses.length; i++){
@@ -163,7 +162,7 @@ class StudentCoursesController extends GetxController{
           debugPrint(res.body);
           if(res.statusCode==200){
             Widgets.snackBar("Course added successfully");
-            refresh();
+            refreshCourses();
           } else {
             Widgets.snackBar("Failed to upload the course");
           }
@@ -247,7 +246,7 @@ class StudentCoursesController extends GetxController{
           debugPrint(res.body);
           if(res.statusCode==200){
             Widgets.snackBar("Course edited successfully");
-            refresh();
+            refreshCourses();
           } else {
             Widgets.snackBar("Failed to edit the course");
           }
@@ -281,7 +280,7 @@ class StudentCoursesController extends GetxController{
             debugPrint(res.body);
             if(res.statusCode==200){
               Widgets.snackBar("Course deleted successfully");
-              refresh();
+              refreshCourses();
             } else {
               Widgets.snackBar("Failed to delete the course");
             }
@@ -291,7 +290,7 @@ class StudentCoursesController extends GetxController{
     );
   }
 
-  void refresh(){
+  void refreshCourses(){
     loading.value = true;
     courses.clear();
     images.clear();

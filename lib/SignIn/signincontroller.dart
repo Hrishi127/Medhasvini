@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:medhasvinieducation/Forgot/forgot.dart';
 import 'package:medhasvinieducation/Home/home.dart';
 import 'package:medhasvinieducation/SignUp/signup.dart';
 import 'package:owesome_validator/owesome_validator.dart';
@@ -43,6 +44,11 @@ class SignInController extends GetxController{
     Get.deleteAll();
   }
 
+  void forgot(){
+    Get.offAll(()=>const Forgot());
+    Get.deleteAll();
+  }
+
   void signIn() async {
     final bool isEmailValid = EmailValidator.validate(controllerEmail.text);
     final bool isPasswordValid = OwesomeValidator.password(controllerPassword.text, OwesomeValidator.passwordMinLen8withCamelAndSpecialChar);
@@ -61,7 +67,8 @@ class SignInController extends GetxController{
       });
       debugPrint(res.body);
       var json = jsonDecode(res.body);
-      if(json["msg"]!=null){
+      debugPrint(res.statusCode.toString());
+      if(res.statusCode == 200){
         Widgets.snackBar(json["msg"]);
         sharedPreferences.setString("token", json["token"]["access"].toString());
         sharedPreferences.setString("isAdmin", json["is_admin"].toString());

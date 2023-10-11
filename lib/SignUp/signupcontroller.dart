@@ -47,7 +47,7 @@ class SignUpController extends GetxController{
     } else if(!isAgreed.value){
       Widgets.snackBar("Terms and Privacy Policy must be accepted");
     } else {
-      var res = await post(Uri.parse(Strings.signUpAPI), body: {
+      var data = json.encode({
         "name" : controllerName.text,
         "email" : controllerEmail.text.toLowerCase(),
         "phonenum" : controllerPhone.text,
@@ -55,11 +55,24 @@ class SignUpController extends GetxController{
         "confirmpassword" : controllerConfirmPassword.text,
         "agreements" : "true"
       });
-      var json = jsonDecode(res.body);
-      if(json["msg"] == "Registration Successful"){
+      var res = await post(
+        Uri.parse(Strings.signUpAPI),
+        body: data,
+        headers: {
+          "content-type" : "application/json",
+          "accept" : "application/json",
+        }
+      );
+
+      debugPrint(res.body);
+      debugPrint(res.statusCode.toString());
+      if(res.statusCode==200 || res.statusCode == 201){
         Widgets.snackBar("Registered successfully");
         Get.offAll(()=>const SignIn());
         Get.deleteAll();
+      } else {
+        var json = jsonDecode(res.body);
+        Widgets.snackBar(json["errors"]["email"][0]);
       }
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:medhasvinieducation/Home/PaymentTree/paymenttreecontroller.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 
@@ -15,75 +16,118 @@ class PaymentTree extends StatelessWidget {
     var controller = Get.put(PaymentTreeController());
 
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: Material(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: Colors.grey.withOpacity(0.5))
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+            child: Material(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(color: Colors.grey.withOpacity(0.5))
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Total Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                    Row(
+                      children: [
+                        const Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
+                        Obx(()=> Text(controller.homeController.totalCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16),)),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+            child: Material(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(color: Colors.grey.withOpacity(0.5))
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: (){
+                  Clipboard.setData(ClipboardData(text: controller.homeController.myReferralCode.value));
+                  Widgets.snackBar("Referral code copied to clipboard");
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Total Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),),
-                      Text(controller.homeController.totalCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 18),),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Your referral code", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                          const SizedBox(height: 4),
+                          Text(controller.homeController.myReferralCode.value, style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 12),),
+                        ],
+                      ),
+                     IconButton(onPressed: (){
+                       Clipboard.setData(ClipboardData(text: controller.homeController.myReferralCode.value));
+                       Widgets.snackBar("Referral code copied to clipboard");
+                     }, icon: const Icon(Icons.copy))
                     ],
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: Material(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: Colors.grey.withOpacity(0.5))
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(10),
-                  onTap: (){
-                    Clipboard.setData(ClipboardData(text: controller.homeController.myReferralCode.value));
-                    Widgets.snackBar("Referral code copied to clipboard");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("Your referral code", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),),
-                            const SizedBox(height: 4),
-                            Text(controller.homeController.myReferralCode.value, style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 14),),
-                          ],
-                        ),
-                       IconButton(onPressed: (){
-                         Clipboard.setData(ClipboardData(text: controller.homeController.myReferralCode.value));
-                         Widgets.snackBar("Referral code copied to clipboard");
-                       }, icon: const Icon(Icons.copy))
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-           Obx(()=> controller.homeController.totalCommission.value=="0"?
-           Expanded(child: Center(child: Text("No commissions yet", style: TextStyle(color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.w700, fontSize: 20),)),):
-           SizedBox(
-             width: Get.width,
-               child: SingleChildScrollView(
+          ),
+         Expanded(
+           child: Obx(()=> controller.homeController.totalCommission.value=="0.00" || controller.homeController.totalCommission.value == "0"?
+           Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               Lottie.asset("assets/animations/empty.json"),
+               const SizedBox(height: 10),
+               Text("To earn commissions share \nyour referral code.", style: TextStyle(color: Colors.black.withOpacity(0.5)),textAlign: TextAlign.center,)
+             ],
+           ):
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Material(
+               shape: RoundedRectangleBorder(
+                 borderRadius: BorderRadius.circular(10),
+                 side: BorderSide(color: Colors.grey.withOpacity(0.5))
+               ),
+               child:  controller.homeController.nodes.isEmpty?
+               const Center(child: CircularProgressIndicator()):
+               SingleChildScrollView(
                  physics: const BouncingScrollPhysics(),
-                 scrollDirection: Axis.horizontal,
-                 child: TreeView(nodes: controller.homeController.nodes))))
-          ],
-        ),
+                 child: Column(
+                   children: [
+                     const SizedBox(height: 8),
+                     const Padding(
+                       padding: EdgeInsets.all(8.0),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: [
+                           Icon(Icons.currency_rupee, size: 18),
+                           Text("Commission Tree", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                         ],
+                       ),
+                     ),
+                     SizedBox(
+                       width: Get.width,
+                         child: SingleChildScrollView(
+                           physics: const BouncingScrollPhysics(),
+                           scrollDirection: Axis.horizontal,
+                           child: TreeView(nodes: controller.homeController.nodes)
+                         )
+                     ),
+                     const SizedBox(height: 8),
+                   ],
+                 ),
+               ),
+             ),
+           )),
+         )
+        ],
       ),
     );
   }

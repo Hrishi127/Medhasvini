@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class HomeController extends GetxController{
   RxList<TreeNode> nodes = <TreeNode>[].obs;
   RxString myReferralCode = "".obs;
   RxString isPaidUser = "false".obs;
+  ConfettiController confettiController = ConfettiController();
 
   @override
   void onInit() {
@@ -129,14 +131,15 @@ class HomeController extends GetxController{
     myReferralCode.value = jsonPaid[0]["label"].substring(jsonPaid[0]["label"].indexOf(",")+1, jsonPaid[0]["label"].length);
     nodes.add(
         TreeNode(content: Material(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-                side: const BorderSide(color: Colors.grey)
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text("You"),
-            )), children: getNodes(jsonPaid[0]["children"]))
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+            side: BorderSide(color: Colors.grey.withOpacity(0.5))
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("You"),
+          ),
+        ), children: getNodes(jsonPaid[0]["children"]))
     );
 
     var res = await http.get(

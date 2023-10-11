@@ -1,11 +1,12 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:medhasvinieducation/Custom/Strings.dart';
 import 'package:medhasvinieducation/Custom/Widgets.dart';
+import 'package:medhasvinieducation/Home/homecontroller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CourseDetailsController extends GetxController{
 
@@ -13,14 +14,12 @@ class CourseDetailsController extends GetxController{
   String courseName = Get.arguments[1];
   String id = Get.arguments[2].toString();
   RxList<dynamic> videos = [].obs;
-  late SharedPreferences sharedPreferences;
   RxList<String> videoIDs = <String>[].obs;
-  RxString isAdmin = "false".obs;
   var controllerName = TextEditingController();
   var controllerDescription = TextEditingController();
   var controllerLink = TextEditingController();
-  String token = "";
   RxBool loading = true.obs;
+  var homeController = Get.find<HomeController>();
 
   @override
   void onInit() {
@@ -29,13 +28,10 @@ class CourseDetailsController extends GetxController{
   }
 
   void loadVideos() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    token = sharedPreferences.getString("token")??"";
-    isAdmin.value = sharedPreferences.getString("isAdmin")??"false";
     var res = await http.get(
       Uri.parse("${Strings.videosAPI}/$courseIndex"),
       headers: {
-        "Authorization" : "Bearer $token"
+        "Authorization" : "Bearer ${homeController.token}"
       }
     );
     debugPrint(res.body);
@@ -45,9 +41,8 @@ class CourseDetailsController extends GetxController{
       videos.value = jsonDecode(res.body) as List;
       for (int i = 0; i < videos.length; i++) {
         String videoLink = videos[i]["videolink"];
-        videoIDs.add(
-            videoLink.replaceAll("https://www.youtube.com/watch?v=", "")
-                .replaceAll("youtube.com/watch?v=", ""));
+        String temp = YoutubePlayer.convertUrlToId(videoLink)??"";
+        videoIDs.add(temp);
       }
     }
   }
@@ -126,14 +121,15 @@ class CourseDetailsController extends GetxController{
         TextButton(onPressed: () async {
           Get.back();
           var res = await http.post(
-              Uri.parse("${Strings.videosAPI}/${id}"),
+              Uri.parse("${Strings.videosAPI}/$id"),
               body: {
                 "videoName" : controllerName.text,
                 "videoDescription" : controllerDescription.text,
-                "videolink" : controllerLink.text,
+                "videolink" : controllerLink.text.replaceAll("https://www.youtube.com/watch?v=", "")
+                    .replaceAll("youtube.com/watch?v=", ""),
               },
               headers: {
-                "Authorization" : "Bearer $token"
+                "Authorization" : "Bearer ${homeController.token}"
               }
           );
           controllerName.text = "";
@@ -142,7 +138,7 @@ class CourseDetailsController extends GetxController{
           debugPrint(res.body);
           if(res.statusCode==200){
             Widgets.snackBar("Video added successfully");
-            refresh();
+            refreshVideos();
           } else {
             Widgets.snackBar("Failed to upload the video");
           }
@@ -231,7 +227,8 @@ class CourseDetailsController extends GetxController{
           var body = json.encode({
             "videoName" : controllerName.text,
             "videoDescription" : controllerDescription.text,
-            "videolink" : controllerLink.text,
+            "videolink" : controllerLink.text.replaceAll("https://www.youtube.com/watch?v=", "")
+                .replaceAll("youtube.com/watch?v=", ""),
           });
 
           var res = await http.put(
@@ -240,17 +237,17 @@ class CourseDetailsController extends GetxController{
               headers: {
                 "content-type" : "application/json",
                 "accept" : "application/json",
-                "Authorization" : "Bearer $token"
+                "Authorization" : "Bearer ${homeController.token}"
               }
           );
           controllerName.text = "";
           controllerDescription.text = "";
           controllerLink.text = "";
 
-          print(res.body);
+          debugPrint(res.body);
           if(res.statusCode==200){
             Widgets.snackBar("Video edited successfully");
-            refresh();
+            refreshVideos();
           } else {
             Widgets.snackBar("Failed to edit the video");
           }
@@ -278,13 +275,13 @@ class CourseDetailsController extends GetxController{
               var res = await http.delete(
                   Uri.parse("${Strings.videosAPI}/${videos[index]["id"]}"),
                   headers: {
-                    "Authorization" : "Bearer $token"
+                    "Authorization" : "Bearer ${homeController.token}"
                   }
               );
               debugPrint(res.body);
               if(res.statusCode==200){
                 Widgets.snackBar("Video deleted successfully");
-                refresh();
+                refreshVideos();
               } else {
                 Widgets.snackBar("Failed to delete the video");
               }
@@ -294,7 +291,7 @@ class CourseDetailsController extends GetxController{
     );
   }
 
-  void refresh(){
+  void refreshVideos(){
     loading.value = true;
     videos.clear();
     videoIDs.clear();
