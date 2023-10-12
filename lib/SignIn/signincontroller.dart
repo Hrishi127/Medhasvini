@@ -18,6 +18,7 @@ class SignInController extends GetxController{
   RxBool isVisible = false.obs;
   RxBool isRememberOn = false.obs;
   late SharedPreferences sharedPreferences;
+  RxBool opened= false.obs;
 
   void loadSp() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -65,15 +66,20 @@ class SignInController extends GetxController{
         "password" : controllerPassword.text,
         "rememberMe" : ""
       });
-      debugPrint(res.body);
+
       var json = jsonDecode(res.body);
-      debugPrint(res.statusCode.toString());
+
       if(res.statusCode == 200){
-        Widgets.snackBar(json["msg"]);
-        sharedPreferences.setString("token", json["token"]["access"].toString());
-        sharedPreferences.setString("isAdmin", json["is_admin"].toString());
-        Get.offAll(()=>const Home());
-        Get.deleteAll();
+        if(!opened.value) {
+          debugPrint(res.body);
+          debugPrint(res.statusCode.toString());
+          Widgets.snackBar(json["msg"]);
+          sharedPreferences.setString("token", json["token"]["access"].toString());
+          sharedPreferences.setString("isAdmin", json["is_admin"].toString());
+          Get.offAll(() => const Home());
+          Get.deleteAll();
+          opened.value = true;
+        }
       }else{
         Widgets.snackBar(json["errors"]["non_field_errors"][0]);
       }

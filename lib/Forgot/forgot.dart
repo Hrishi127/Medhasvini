@@ -31,7 +31,7 @@ class Forgot extends StatelessWidget {
                       const SizedBox(height: 20),
                       const Text("Forgot password", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35)),
                       const SizedBox(height: 6),
-                      const Text("Fill the details to reset your password", style: TextStyle(fontWeight: FontWeight.w500),),
+                      const Text("Enter your email to reset your password", style: TextStyle(fontWeight: FontWeight.w500),),
                       const SizedBox(height: 30),
                       const Text("Email address", style: TextStyle(fontWeight: FontWeight.w500)),
                       const SizedBox(height: 8),
@@ -72,6 +72,7 @@ class Forgot extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Text("Return to", style: TextStyle(fontWeight: FontWeight.w500),),
                           SizedBox(

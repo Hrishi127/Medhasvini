@@ -28,10 +28,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  firebase_core:
+  firebase_database:
   flutter_stripe:
   confetti:
   flutter_simple_treeview:
   clipboard:
+  pod_player:
   youtube_player_flutter:
   url_launcher:
   html_viewer_elite:

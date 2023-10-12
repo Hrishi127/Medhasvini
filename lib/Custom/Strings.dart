@@ -15,7 +15,7 @@ class Strings{
   static String secretTestKey = "sk_test_51LLkgrINeLgEu8OTosPFfplXeIZL2TzBkO3AecEf6ys6iw0eWimKzNweJLXmtNAiD5CS9AumcrSf8ZCvtXrK0TQ700k9syQIbh";
   static String publishableKey = "pk_live_51Ny7wfSDwhqjewtiPNdQ9L7JUcJZRs5A7tsk9ULNXDsOvPR1h0RYJvbr59WeGS3krHhY3z6QZolTos5pT11PRPTI00fp4TgJoh";
   static String secretKey = "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";
-  static bool testMode = true;
+  static bool testMode = false;
   static String publishableStripe = testMode?publishableTestKey:publishableKey;
   static String secretStripe = testMode?secretTestKey:secretKey;
   static String forgotPasswordAPI = "https://medhasvinieducation.com/api/user/send-reset-password-email/";

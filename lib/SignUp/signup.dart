@@ -180,7 +180,7 @@ class SignUp extends StatelessWidget {
                                     const Text(" and ", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
                                     InkWell(
                                       onTap: (){
-                                        launch("http://medhasvinieducation.com/privacypolicy");
+                                        launch("http://medhasvinieducation.com/privacy");
                                       },
                                       child: const Text("Privacy Policy", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.indigo)))
                                   ],

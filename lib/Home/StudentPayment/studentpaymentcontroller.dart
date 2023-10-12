@@ -52,7 +52,7 @@ class StudentPaymentController extends GetxController{
 
 
     Map<String, dynamic> body = {
-      "amount" : "10000",
+      "amount" : "175000",
       "currency" : "INR",
       "receipt_email" : homeController.email.value
     };

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:medhasvinieducation/Custom/Strings.dart';
@@ -17,20 +18,25 @@ class ForgotController extends GetxController{
   }
 
   void resetPassword() async {
-    var res = await http.post(
-      Uri.parse(Strings.forgotPasswordAPI),
-      body: {
-        "email" : controllerEmail.text
+    if (EmailValidator.validate(controllerEmail.text)) {
+      var res = await http.post(
+          Uri.parse(Strings.forgotPasswordAPI),
+          body: {
+            "email": controllerEmail.text
+          }
+      );
+      debugPrint(res.body);
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body);
+        Widgets.snackBar(data["msg"]);
+        singIn();
+      } else {
+        var data = jsonDecode(res.body);
+        Widgets.snackBar(data["errors"]["non_field_errors"][0]);
       }
-    );
-    debugPrint(res.body);
-    if(res.statusCode==200){
-      var data = jsonDecode(res.body);
-      Widgets.snackBar(data["msg"]);
-      singIn();
-    } else {
-      var data = jsonDecode(res.body);
-      Widgets.snackBar(data["errors"]["non_field_errors"][0]);
+    }
+    else {
+      Widgets.snackBar("Invalid Email");
     }
   }
 }

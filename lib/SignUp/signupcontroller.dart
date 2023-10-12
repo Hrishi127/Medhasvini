@@ -20,6 +20,8 @@ class SignUpController extends GetxController{
   RxBool isVisible = false.obs;
   RxBool isVisibleConfirm = false.obs;
   RxBool isAgreed = false.obs;
+  RxBool opened= false.obs;
+
 
   void signIn(){
     Get.offAll(()=>const SignIn());
@@ -63,13 +65,15 @@ class SignUpController extends GetxController{
           "accept" : "application/json",
         }
       );
-
-      debugPrint(res.body);
-      debugPrint(res.statusCode.toString());
       if(res.statusCode==200 || res.statusCode == 201){
-        Widgets.snackBar("Registered successfully");
-        Get.offAll(()=>const SignIn());
-        Get.deleteAll();
+        if(!opened.value) {
+          debugPrint(res.body);
+          debugPrint(res.statusCode.toString());
+          Widgets.snackBar("Registered successfully");
+          Get.offAll(() => const SignIn());
+          Get.deleteAll();
+          opened.value = true;
+        }
       } else {
         var json = jsonDecode(res.body);
         Widgets.snackBar(json["errors"]["email"][0]);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:medhasvinieducation/Home/StudentCourse/CourseDetails/coursedetailscontroller.dart';
+import 'package:pod_player/pod_player.dart';
 import 'package:youtube_player_iframe_plus/youtube_player_iframe_plus.dart';
 
 class CourseDetails extends StatelessWidget {
@@ -45,88 +46,91 @@ class CourseDetails extends StatelessWidget {
                 padding: (index==controller.videos.length-1)
                   ?const EdgeInsets.fromLTRB(8, 8, 8, 8)
                   :const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                child: Material(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
-                      side: BorderSide(color: Colors.grey.withOpacity(0.50))
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                              width: Get.width,
-                              child: YoutubePlayerIFramePlus(
-                                controller: YoutubePlayerController(initialVideoId: controller.videoIDs[index], params: const YoutubePlayerParams(autoPlay: false, showFullscreenButton: true)),
-                              )
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(controller.videos[index]["videoName"], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                      const SizedBox(height: 8),
-                                      Text(controller.videos[index]["videoDescription"], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Obx(()=>
-                              controller.homeController.isAdmin.value=="true"
-                                  ? Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: PopupMenuButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      icon: Icon(Icons.more_vert, color: Colors.black.withOpacity(0.7)),
-                                      padding: EdgeInsets.zero,
-                                      itemBuilder: (context)=>[
-                                        PopupMenuItem(
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.edit, color: Colors.black.withOpacity(0.7)),
-                                              const SizedBox(width: 8),
-                                              const Text("Edit", style: TextStyle(fontWeight: FontWeight.w600),),
-                                            ],
-                                          ),
-                                          onTap: (){
-                                            controller.editVideo(index);
-                                          },
-                                        ),
-                                        PopupMenuItem(
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.delete, color: Colors.black.withOpacity(0.7)),
-                                              const SizedBox(width: 8),
-                                              const Text("Delete", style: TextStyle(fontWeight: FontWeight.w600),),
-                                            ],
-                                          ),
-                                          onTap: (){
-                                            controller.delete(index);
-                                          },
-                                        )
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Material(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.grey.withOpacity(0.50))
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                                width: Get.width,
+                                child: PodVideoPlayer(
+                                    controller: PodPlayerController(playVideoFrom: PlayVideoFrom.youtube("https://www.youtube.com/watch?v=${controller.videos[index]["videolink"]}"), podPlayerConfig: const PodPlayerConfig(autoPlay: false) )..initialise()
+                                )
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(controller.videos[index]["videoName"], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                        const SizedBox(height: 8),
+                                        Text(controller.videos[index]["videoDescription"], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))
                                       ],
                                     ),
                                   ),
                                 ),
-                              )
-                                  : const SizedBox.shrink(),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                                Obx(()=>
+                                controller.homeController.isAdmin.value=="true"
+                                    ? Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: PopupMenuButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        icon: Icon(Icons.more_vert, color: Colors.black.withOpacity(0.7)),
+                                        padding: EdgeInsets.zero,
+                                        itemBuilder: (context)=>[
+                                          PopupMenuItem(
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.edit, color: Colors.black.withOpacity(0.7)),
+                                                const SizedBox(width: 8),
+                                                const Text("Edit", style: TextStyle(fontWeight: FontWeight.w600),),
+                                              ],
+                                            ),
+                                            onTap: (){
+                                              controller.editVideo(index);
+                                            },
+                                          ),
+                                          PopupMenuItem(
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.delete, color: Colors.black.withOpacity(0.7)),
+                                                const SizedBox(width: 8),
+                                                const Text("Delete", style: TextStyle(fontWeight: FontWeight.w600),),
+                                              ],
+                                            ),
+                                            onTap: (){
+                                              controller.delete(index);
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                    : const SizedBox.shrink(),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

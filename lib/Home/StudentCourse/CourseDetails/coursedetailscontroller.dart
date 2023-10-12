@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:medhasvinieducation/Custom/Strings.dart';
 import 'package:medhasvinieducation/Custom/Widgets.dart';
 import 'package:medhasvinieducation/Home/homecontroller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CourseDetailsController extends GetxController{
@@ -125,8 +124,7 @@ class CourseDetailsController extends GetxController{
               body: {
                 "videoName" : controllerName.text,
                 "videoDescription" : controllerDescription.text,
-                "videolink" : controllerLink.text.replaceAll("https://www.youtube.com/watch?v=", "")
-                    .replaceAll("youtube.com/watch?v=", ""),
+                "videolink" : YoutubePlayer.convertUrlToId(controllerLink.text)??""
               },
               headers: {
                 "Authorization" : "Bearer ${homeController.token}"
@@ -227,8 +225,7 @@ class CourseDetailsController extends GetxController{
           var body = json.encode({
             "videoName" : controllerName.text,
             "videoDescription" : controllerDescription.text,
-            "videolink" : controllerLink.text.replaceAll("https://www.youtube.com/watch?v=", "")
-                .replaceAll("youtube.com/watch?v=", ""),
+            "videolink" : YoutubePlayer.convertUrlToId(controllerLink.text)??""
           });
 
           var res = await http.put(

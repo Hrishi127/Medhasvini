@@ -1,28 +1,45 @@
 import 'dart:convert';
-
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medhasvinieducation/Custom/Strings.dart';
 import 'package:medhasvinieducation/Custom/Widgets.dart';
+import 'package:medhasvinieducation/Home/LiveClass/LiveClassPreview/liveclasspreview.dart';
 import 'package:medhasvinieducation/Home/homecontroller.dart';
+import 'package:pod_player/pod_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
-import '../../Custom/Strings.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LiveClassController extends GetxController{
 
    var homeController = Get.find<HomeController>();
-   RxBool loading = false.obs;
+   RxBool loading = true.obs;
    late SharedPreferences sharedPreferences;
-   RxList<dynamic> videos = <String>[].obs;
-   RxList<String> videoIDs = <String>[].obs;
+   RxList videos = [].obs;
    var controllerName = TextEditingController();
    var controllerDescription = TextEditingController();
    var controllerLink = TextEditingController();
+   var dbref = FirebaseDatabase.instance.ref().child("Live Class");
+   List<String> keys = [];
 
-   void loadVideos() async{
+   @override
+   void onInit() {
+      super.onInit();
+      dbref.onChildAdded.listen((event) {
+         loading.value = false;
+         keys.add(event.snapshot.key??"");
+         Map map = event.snapshot.value as Map;
+         videos.add(map);
+      });
 
-   }
+      dbref.onChildRemoved.listen((event) {
+         loading.value = false;
+         String key = event.snapshot.key??"";
+         videos.removeAt(keys.indexOf(key));
+         keys.removeAt(keys.indexOf(key));
+      });
+  }
 
    void addVideo(){
       Get.dialog(AlertDialog(
@@ -97,13 +114,20 @@ class LiveClassController extends GetxController{
             }, child: const Text("BACK")),
             TextButton(onPressed: () async {
                Get.back();
+               var body = {
+                  "videoName" : controllerName.text,
+                  "videoDescription" : controllerDescription.text,
+                  "videolink" : YoutubePlayer.convertUrlToId(controllerLink.text)??""
+               };
+
+               dbref.push().set(body);
+               // loadVideos();
                // var res = await http.post(
                //     Uri.parse("${Strings.videosAPI}/$id"),
                //     body: {
                //        "videoName" : controllerName.text,
                //        "videoDescription" : controllerDescription.text,
-               //        "videolink" : controllerLink.text.replaceAll("https://www.youtube.com/watch?v=", "")
-               //            .replaceAll("youtube.com/watch?v=", ""),
+               //        "videolink" : YoutubePlayer.convertUrlToId(controllerLink.text)??""
                //     },
                //     headers: {
                //        "Authorization" : "Bearer ${homeController.token}"
@@ -126,13 +150,20 @@ class LiveClassController extends GetxController{
 
    void editVideo(int index){}
 
-   void delete(int index){}
+   void delete(int index){
+      dbref.child(keys[index]).remove();
+      keys.removeAt(index);
+      // refreshVideos();
+   }
 
-   void refreshVideos(){
-      loading.value = true;
-      videos.clear();
-      videoIDs.clear();
-      loadVideos();
+   // void refreshVideos(){
+   //    loading.value = true;
+   //    videos.clear();
+   //    loadVideos();
+   // }
+
+   void open(int index){
+      Get.to(()=> const LiveClassPreview(), arguments: [videos[index]["videoName"], videos[index]["videolink"]]);
    }
 
 }
