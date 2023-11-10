@@ -15,6 +15,7 @@ class HomeController extends GetxController{
 
   RxString username = "".obs;
   RxString email = "".obs;
+  RxString phone = "".obs;
   RxString id = "".obs;
   late SharedPreferences sharedPreferences;
   RxInt currentPage = 0.obs;
@@ -23,9 +24,12 @@ class HomeController extends GetxController{
   var searchText = "".obs;
   FocusNode searchFocus = FocusNode();
   RxBool isSearchAvailable = true.obs;
+  RxBool isLoadingUserPaidOrNot = true.obs;
   RxString isAdmin = "false".obs;
   String token = "";
-  RxString totalCommission = "".obs;
+  RxString referralCommission = "".obs;
+  RxString binaryCommission = "".obs;
+  RxString pendingCommission = "".obs;
   RxList<TreeNode> nodes = <TreeNode>[].obs;
   RxString myReferralCode = "".obs;
   RxString isPaidUser = "false".obs;
@@ -62,6 +66,7 @@ class HomeController extends GetxController{
     var json = jsonDecode(res.body);
     username.value = json["name"];
     email.value = json["email"];
+    phone.value = json["phonenum"];
     id.value = json["id"].toString();
 
     debugPrint("${Strings.binaryTreeAPI}/${id.value}");
@@ -74,6 +79,8 @@ class HomeController extends GetxController{
     );
     debugPrint(resPaid.body);
     var jsonPaid = jsonDecode(resPaid.body);
+
+    isLoadingUserPaidOrNot.value = false;
 
     try{
     if(jsonPaid["msg"]!=null) {
@@ -150,9 +157,13 @@ class HomeController extends GetxController{
     );
     if(res.statusCode == 200){
       var json = jsonDecode(res.body);
-      totalCommission.value = json["commission_amount"];
+      referralCommission.value = json["direct_amount"];
+      binaryCommission.value = json["binary_amount"];
+      pendingCommission.value = json["pending_commission_amount"];
     } else {
-      totalCommission.value = "0";
+      referralCommission.value = "0";
+      binaryCommission.value = "0";
+      pendingCommission.value = "0";
     }
   }
 

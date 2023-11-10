@@ -31,6 +31,7 @@ dependencies:
   firebase_core:
   firebase_database:
   flutter_stripe:
+  razorpay_flutter:
   confetti:
   flutter_simple_treeview:
   clipboard:

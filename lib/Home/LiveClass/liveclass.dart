@@ -29,10 +29,11 @@ class LiveClass extends StatelessWidget {
           children: [
             Lottie.asset("assets/animations/empty.json"),
             const SizedBox(height: 10),
-            Text("To add a live class click on + button.", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
+            Text("No live class available", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
           ],
         ))
             :ListView.builder(
+          physics: const  BouncingScrollPhysics(),
           itemCount: controller.videos.length,
           itemBuilder: (context, index){
             return Padding(

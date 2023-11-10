@@ -50,7 +50,7 @@ class LiveClassPreview extends StatelessWidget {
                         children: [
                           Lottie.asset("assets/animations/empty.json"),
                           const SizedBox(height: 10),
-                          Text("No messages yet.", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
+                          Text("No messages yet", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
                         ],
                       ))
                           :ListView.builder(

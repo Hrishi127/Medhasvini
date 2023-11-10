@@ -27,14 +27,58 @@ class PaymentTree extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
-                    const Text("Total Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
-                        Obx(()=> Text(controller.homeController.totalCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16),)),
+                        const Text("Referral Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                        Row(
+                          children: [
+                            const Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
+                            Obx(()=> Text(controller.homeController.referralCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16),)),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Binary Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                        Row(
+                          children: [
+                            const Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
+                            Obx(()=> Text(controller.homeController.binaryCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16),)),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Pending Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                        Row(
+                          children: [
+                            const Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
+                            Obx(()=> Text(controller.homeController.pendingCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16),)),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    Row(
+
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Total Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                        Row(
+                          children: [
+                            const Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
+                            Obx(()=> Text((double.parse(controller.homeController.referralCommission.value)+double.parse(controller.homeController.binaryCommission.value)).toString(), style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16),)),
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -79,13 +123,13 @@ class PaymentTree extends StatelessWidget {
             ),
           ),
          Expanded(
-           child: Obx(()=> controller.homeController.totalCommission.value=="0.00" || controller.homeController.totalCommission.value == "0"?
+           child: Obx(()=> controller.homeController.referralCommission.value=="0.00" || controller.homeController.referralCommission.value == "0"?
            Column(
              mainAxisAlignment: MainAxisAlignment.center,
              children: [
                Lottie.asset("assets/animations/empty.json"),
                const SizedBox(height: 10),
-               Text("To earn commissions share \nyour referral code.", style: TextStyle(color: Colors.black.withOpacity(0.5)),textAlign: TextAlign.center,)
+               Text("To earn commissions share \nyour referral code", style: TextStyle(color: Colors.black.withOpacity(0.5)),textAlign: TextAlign.center,)
              ],
            ):
            Padding(

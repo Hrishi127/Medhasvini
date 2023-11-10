@@ -31,7 +31,7 @@ class StudentCourse extends StatelessWidget {
         children: [
           Lottie.asset("assets/animations/empty.json"),
           const SizedBox(height: 10),
-          Text("To add a course click on + button.", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
+          Text("No courses yet", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
         ],
       ))
             : controller.homeController.isSearching.value?
@@ -63,7 +63,8 @@ class StudentCourse extends StatelessWidget {
                             children: [
                               Obx(()=>
                                   SizedBox(
-                                      width: Get.width,
+                                      width: Get.width/2,
+                                      height: Get.width/2,
                                       child: Image.memory(controller.images[index], fit: BoxFit.cover)
                                   ),
                               ),
@@ -170,6 +171,7 @@ class StudentCourse extends StatelessWidget {
                             Obx(()=>
                                 SizedBox(
                                 width: Get.width,
+                                height: Get.width/2,
                                 child: Image.memory(controller.images[index], fit: BoxFit.cover)
                               ),
                             ),

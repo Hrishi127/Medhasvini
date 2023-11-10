@@ -42,12 +42,38 @@ class StudentPayment extends StatelessWidget {
                   TextField(
                     controller: controller.controllerReferral,
                     decoration: InputDecoration(
-                      labelText: "Code",
+                      labelText: "Parent Code",
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(color: Colors.grey),
                         borderRadius: BorderRadius.circular(10)
                       )
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  Obx(()=> SwitchListTile(
+                    value: controller.hasChildCode.value,
+                    title: const Text("Do you have child referral code?", style: TextStyle(fontSize: 12),),
+                    onChanged: (checked){
+                      controller.hasChildCode.value = !controller.hasChildCode.value;
+                    },
+                    contentPadding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  )),
+                  Obx(()=>
+                     controller.hasChildCode.value?Column(
+                      children: [
+                        TextField(
+                          controller: controller.controllerReferralChild,
+                          decoration: InputDecoration(
+                              labelText: "Child Code",
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ):const Stack(),
                   ),
                   Theme(
                     data: ThemeData(

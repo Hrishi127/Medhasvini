@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:medhasvinieducation/Home/StudentCourse/CourseDetails/coursedetailscontroller.dart';
 import 'package:pod_player/pod_player.dart';
-import 'package:youtube_player_iframe_plus/youtube_player_iframe_plus.dart';
 
 class CourseDetails extends StatelessWidget {
   const CourseDetails({super.key});
@@ -36,7 +35,7 @@ class CourseDetails extends StatelessWidget {
         children: [
           Lottie.asset("assets/animations/empty.json"),
           const SizedBox(height: 10),
-          Text("To add a video click on + button.", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
+          Text("No videos yet", style: TextStyle(color: Colors.black.withOpacity(0.5)),)
         ],
       ))
           :ListView.builder(
@@ -61,7 +60,10 @@ class CourseDetails extends StatelessWidget {
                             SizedBox(
                                 width: Get.width,
                                 child: PodVideoPlayer(
-                                    controller: PodPlayerController(playVideoFrom: PlayVideoFrom.youtube("https://www.youtube.com/watch?v=${controller.videos[index]["videolink"]}"), podPlayerConfig: const PodPlayerConfig(autoPlay: false) )..initialise()
+                                    controller: PodPlayerController(
+                                      playVideoFrom: PlayVideoFrom.youtube(
+                                        "https://www.youtube.com/watch?v=${controller.videos[index]["videolink"]}"),
+                                        podPlayerConfig: const PodPlayerConfig(autoPlay: false))..initialise()
                                 )
                             ),
                             Row(

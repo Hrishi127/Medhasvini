@@ -54,7 +54,9 @@ class Home extends StatelessWidget {
                 ),
               ),
             actions: [
-              Obx(() => controller.isSearchAvailable.value?
+              Obx(() =>
+              controller.isPaidUser.value=="true"?
+              controller.isSearchAvailable.value?
               controller.isSearching.value?const Stack():
               IconButton(
                 onPressed: (){
@@ -62,7 +64,7 @@ class Home extends StatelessWidget {
                 },
                 tooltip: "Search",
                 icon: const Icon(Icons.search, color: Colors.black,),
-              ): const Stack()),
+              ): const Stack(): const Stack()),
               Obx(()=>
                 controller.currentPage.value == 2?
                 controller.isPaidUser.value == "true"?
@@ -240,7 +242,9 @@ class Home extends StatelessWidget {
             ),
           ),
           body: Obx(()=>
-            (controller.currentPage.value == 0)
+            controller.isLoadingUserPaidOrNot.value
+            ? const Center(child: CircularProgressIndicator(color: Colors.indigo))
+            : (controller.currentPage.value == 0)
               ? const StudentCourse()
               : (controller.currentPage.value == 1)
                 ? const LiveClass()
