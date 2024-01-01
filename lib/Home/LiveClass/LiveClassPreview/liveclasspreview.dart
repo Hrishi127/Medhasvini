@@ -20,11 +20,7 @@ class LiveClassPreview extends StatelessWidget {
       ),
       body: Column(
         children: [
-          PodVideoPlayer(controller: PodPlayerController(
-            playVideoFrom: PlayVideoFrom.youtube(
-              controller.videoID
-            )
-          )..initialise()),
+          PodVideoPlayer(controller: controller.podController),
           Expanded(
             child: Column(
               children: [
@@ -134,7 +130,7 @@ class LiveClassPreview extends StatelessWidget {
                                     )),
                                     IconButton(onPressed: (){
                                       controller.pushMessage();
-                                    }, icon: Icon(Icons.send, color: Colors.indigo,))
+                                    }, icon: const Icon(Icons.send, color: Colors.indigo,))
                                   ],
                                 ),
                               ),

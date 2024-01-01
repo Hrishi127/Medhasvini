@@ -87,7 +87,23 @@ class PaymentTree extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+            child: ElevatedButton(
+              onPressed: (){
+                controller.payout();
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.payment),
+                  SizedBox(width: 8),
+                  Text("Withdraw"),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Material(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -122,55 +138,55 @@ class PaymentTree extends StatelessWidget {
               ),
             ),
           ),
-         Expanded(
-           child: Obx(()=> controller.homeController.referralCommission.value=="0.00" || controller.homeController.referralCommission.value == "0"?
-           Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Lottie.asset("assets/animations/empty.json"),
-               const SizedBox(height: 10),
-               Text("To earn commissions share \nyour referral code", style: TextStyle(color: Colors.black.withOpacity(0.5)),textAlign: TextAlign.center,)
-             ],
-           ):
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Material(
-               shape: RoundedRectangleBorder(
-                 borderRadius: BorderRadius.circular(10),
-                 side: BorderSide(color: Colors.grey.withOpacity(0.5))
-               ),
-               child:  controller.homeController.nodes.isEmpty?
-               const Center(child: CircularProgressIndicator()):
-               SingleChildScrollView(
-                 physics: const BouncingScrollPhysics(),
-                 child: Column(
-                   children: [
-                     const SizedBox(height: 8),
-                     const Padding(
-                       padding: EdgeInsets.all(8.0),
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: [
-                           Icon(Icons.currency_rupee, size: 18),
-                           Text("Commission Tree", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-                         ],
+          Expanded(
+             child: Obx(()=> controller.homeController.referralCommission.value=="0.00" || controller.homeController.referralCommission.value == "0"?
+             Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Lottie.asset("assets/animations/empty.json"),
+                 const SizedBox(height: 10),
+                 Text("To earn commissions share \nyour referral code", style: TextStyle(color: Colors.black.withOpacity(0.5)),textAlign: TextAlign.center,)
+               ],
+             ):
+             Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: Material(
+                 shape: RoundedRectangleBorder(
+                   borderRadius: BorderRadius.circular(10),
+                   side: BorderSide(color: Colors.grey.withOpacity(0.5))
+                 ),
+                 child:  controller.homeController.nodes.isEmpty?
+                 const Center(child: CircularProgressIndicator()):
+                 SingleChildScrollView(
+                   physics: const BouncingScrollPhysics(),
+                   child: Column(
+                     children: [
+                       const SizedBox(height: 8),
+                       const Padding(
+                         padding: EdgeInsets.all(8.0),
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Icon(Icons.currency_rupee, size: 18),
+                             Text("Commission Tree", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                           ],
+                         ),
                        ),
-                     ),
-                     SizedBox(
-                       width: Get.width,
-                         child: SingleChildScrollView(
-                           physics: const BouncingScrollPhysics(),
-                           scrollDirection: Axis.horizontal,
-                           child: TreeView(nodes: controller.homeController.nodes)
-                         )
-                     ),
-                     const SizedBox(height: 8),
-                   ],
+                       SizedBox(
+                         width: Get.width,
+                           child: SingleChildScrollView(
+                             physics: const BouncingScrollPhysics(),
+                             scrollDirection: Axis.horizontal,
+                             child: TreeView(nodes: controller.homeController.nodes)
+                           )
+                       ),
+                       const SizedBox(height: 8),
+                     ],
+                   ),
                  ),
                ),
-             ),
-           )),
-         )
+             )),
+           )
         ],
       ),
     );

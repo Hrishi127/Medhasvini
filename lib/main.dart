@@ -15,9 +15,9 @@ void main() async{
   Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-  Stripe.publishableKey = Strings.publishableStripe;
-  Stripe.merchantIdentifier = 'Medhasvini Education';
-  await Stripe.instance.applySettings();
+  // Stripe.publishableKey = Strings.publishableStripe;
+  // Stripe.merchantIdentifier = 'Medhasvini Education';
+  // await Stripe.instance.applySettings();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   String token = sharedPreferences.getString("token")??"";
   SystemChrome.setPreferredOrientations([

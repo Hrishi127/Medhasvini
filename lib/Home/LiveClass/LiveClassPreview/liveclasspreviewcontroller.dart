@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:medhasvinieducation/Home/homecontroller.dart';
+import 'package:pod_player/pod_player.dart';
 
 class LiveClassPreviewController extends GetxController{
 
@@ -15,6 +16,15 @@ class LiveClassPreviewController extends GetxController{
   var controllerMessage = TextEditingController();
   var homeController = Get.find<HomeController>();
   var scrollController = ScrollController();
+  var podController = PodPlayerController(
+      playVideoFrom: PlayVideoFrom.youtube(Get.arguments[1])
+  )..initialise();
+
+  @override
+  void onClose() {
+    podController.dispose();
+    super.onClose();
+  }
 
   @override
   void onInit() {

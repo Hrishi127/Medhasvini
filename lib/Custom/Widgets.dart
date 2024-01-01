@@ -32,7 +32,7 @@ class Widgets{
                   color: Colors.indigo,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                    child: Text(referralCode, style: TextStyle(color: Colors.white),),
+                    child: Text(referralCode, style: const TextStyle(color: Colors.white)),
                   ),
                 )
               ],

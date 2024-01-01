@@ -103,11 +103,15 @@ class Home extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10)
                                 ),
                                 itemBuilder: (context)=>[
-                                  PopupMenuItem(enabled: false,child: Row(
-                                    children: [
-                                      const Text("Signed in as "),
-                                      Text(controller.username.value, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                    ],
+                                  PopupMenuItem(enabled: false,child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: const BouncingScrollPhysics(),
+                                    child: Row(
+                                      children: [
+                                        const Text("Signed in as "),
+                                        Text(controller.username.value, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                      ],
+                                    ),
                                   )),
                                   const PopupMenuDivider(),
                                   PopupMenuItem(child: Row(
