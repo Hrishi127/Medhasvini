@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -138,15 +137,29 @@ class HomeController extends GetxController{
 
     myReferralCode.value = jsonPaid[0]["label"].substring(jsonPaid[0]["label"].indexOf(",")+1, jsonPaid[0]["label"].length);
     nodes.add(
-        TreeNode(content: Material(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: BorderSide(color: Colors.grey.withOpacity(0.5))
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("You"),
-          ),
+        TreeNode(content: Stack(
+          children: [
+            Material(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(color: Colors.grey.withOpacity(0.5))
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text("You"),
+              ),
+            ),
+            Positioned.fill(child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(5),
+                onTap: (){
+                  Clipboard.setData(ClipboardData(text: myReferralCode.value));
+                  Widgets.snackBar("Referral code copied to clipboard");
+                },
+              ),
+            ))
+          ],
         ), children: getNodes(jsonPaid[0]["children"]))
     );
 

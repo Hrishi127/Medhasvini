@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' as g;
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:medhasvinieducation/Home/PaymentTree/WithdrawnHistory/withdrawnhistory.dart';
 import 'package:medhasvinieducation/Home/homecontroller.dart';
 
 class PaymentTreeController extends g.GetxController{
@@ -15,6 +16,9 @@ class PaymentTreeController extends g.GetxController{
   void payout() async {
 
     Get.dialog(AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10)
+      ),
       title: const Text("Payout"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -139,6 +143,10 @@ class PaymentTreeController extends g.GetxController{
       ],
     ));
 
+  }
+
+  void history(){
+    Get.to(const WithdrawnHistory());
   }
 
 }

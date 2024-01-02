@@ -61,8 +61,8 @@ class PaymentTree extends StatelessWidget {
                         const Text("Pending Commission", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
                         Row(
                           children: [
-                            const Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
-                            Obx(()=> Text(controller.homeController.pendingCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16),)),
+                            const Icon(Icons.currency_rupee, color: Color.fromRGBO(250, 204, 21, 1), size: 18,),
+                            Obx(()=> Text(controller.homeController.pendingCommission.value, style: const TextStyle(fontWeight: FontWeight.w700, color: Color.fromRGBO(250, 204, 21, 1), fontSize: 16),)),
                           ],
                         ),
                       ],
@@ -81,25 +81,98 @@ class PaymentTree extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Total Withdrawal", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                        Row(
+                          children: [
+                            const Text("-", style: TextStyle(fontWeight: FontWeight.w700, color: Colors.red, fontSize: 16)),
+                            const Icon(Icons.currency_rupee, color: Colors.red, size: 18,),
+                            Obx(()=> Text((double.parse(controller.homeController.referralCommission.value)+double.parse(controller.homeController.binaryCommission.value)).toString(), style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.red, fontSize: 16),)),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Available Amount", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                        Row(
+                          children: [
+                            Icon(Icons.currency_rupee, color: Colors.green, size: 18,),
+                            Text("0", style: TextStyle(fontWeight: FontWeight.w700, color: Colors.green, fontSize: 16)),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-            child: ElevatedButton(
-              onPressed: (){
-                controller.payout();
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.payment),
-                  SizedBox(width: 8),
-                  Text("Withdraw"),
-                ],
-              ),
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: TextButton(
+                      onPressed: (){
+                        controller.history();
+                      },
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: const BorderSide(color: Colors.indigo)
+                        )
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.history),
+                          SizedBox(width: 8),
+                          Text("History"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Theme(
+                  data: ThemeData(
+                    primarySwatch: Colors.grey
+                  ),
+                  child: Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: TextButton(
+                        onPressed: (){
+                          controller.payout();
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.indigo,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: const BorderSide(color: Colors.indigo)
+                          )
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.payment, color: Colors.white,),
+                            SizedBox(width: 8),
+                            Text("Withdraw", style: TextStyle(color: Colors.white),),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -128,10 +201,10 @@ class PaymentTree extends StatelessWidget {
                           Text(controller.homeController.myReferralCode.value, style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 12),),
                         ],
                       ),
-                     IconButton(onPressed: (){
-                       Clipboard.setData(ClipboardData(text: controller.homeController.myReferralCode.value));
-                       Widgets.snackBar("Referral code copied to clipboard");
-                     }, icon: const Icon(Icons.copy))
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Icon(Icons.copy),
+                      )
                     ],
                   ),
                 ),
