@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:medhasvinieducation/Custom/Strings.dart';
@@ -9,7 +8,7 @@ import 'package:medhasvinieducation/Home/homecontroller.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StudentPaymentController extends GetxController{
+class MembershipController extends GetxController{
 
   var controllerReferral = TextEditingController();
   var controllerReferralChild = TextEditingController();
@@ -59,8 +58,8 @@ class StudentPaymentController extends GetxController{
 
     Razorpay razorpay = Razorpay();
     var options = {
-      'key': Strings.testMode? 'rzp_test_tumiFCOB1lz5rh' : 'rzp_live_rBpw2qKSNK9lFY',
-      'amount': 100,
+      'key': Strings.testMode? 'rzp_test_htyBOTl7brBNsN' : 'rzp_live_rBpw2qKSNK9lFY',
+      'amount': 200,
       'name': 'Medhasvini Education',
       'description': 'Course',
       'retry': {'enabled': true, 'max_count': 1},
@@ -82,11 +81,23 @@ class StudentPaymentController extends GetxController{
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) async {
     congDialog();
-    var data = json.encode({
+    var data = hasChildCode.value?
+
+    json.encode({
       "amount" : 1999,
+      "Payment_Id" : response.paymentId,
+      "referral_code": controllerReferral.text.toString(),
+      "child_referral_code" : controllerReferralChild.text.toString(),
+      "userid" : int.parse(homeController.id.value.toString())
+    }) :
+
+    json.encode({
+      "amount" : 1999,
+      "Payment_Id" : response.paymentId,
       "referral_code": controllerReferral.text.toString(),
       "userid" : int.parse(homeController.id.value.toString())
     });
+
     var res = await http.post(
       Uri.parse(Strings.paymentDoneAPI),
       body: data,
@@ -102,60 +113,6 @@ class StudentPaymentController extends GetxController{
   void handleExternalWalletSelected(ExternalWalletResponse response){
     debugPrint(response.walletName);
   }
-
-
-
-  // Future<void> paymentStripe() async {
-  //
-  //
-  //   Map<String, dynamic> body = {
-  //     "amount" : "199900",
-  //     "currency" : "INR",
-  //     "receipt_email" : homeController.email.value
-  //   };
-  //
-  //   var res = await http.post(
-  //       Uri.parse(Strings.stripeAPI),
-  //       body: body,
-  //       headers: {
-  //         "Authorization" : "Bearer ${Strings.secretStripe}",
-  //         "Content-type" : "application/x-www-form-urlencoded"
-  //       }
-  //   );
-  //   paymentIntent = json.decode(res.body);
-  //   debugPrint(paymentIntent.toString());
-  //
-  //   await Stripe.instance.initPaymentSheet(paymentSheetParameters: SetupPaymentSheetParameters(
-  //     paymentIntentClientSecret: paymentIntent!["client_secret"],
-  //     style: ThemeMode.light,
-  //     merchantDisplayName: "Medhasvini Education",
-  //     billingDetails: BillingDetails(
-  //         email: homeController.email.value,
-  //         name: homeController.username.value
-  //     ),
-  //   )).then((value) => {});
-  //
-  //   var data = json.encode({
-  //     "amount" : 1999,
-  //     "referral_code": controllerReferral.text.toString(),
-  //     "userid" : int.parse(homeController.id.value.toString())
-  //   });
-  //
-  //   await Stripe.instance.presentPaymentSheet().then((value) async {
-  //     var res = await http.post(
-  //       Uri.parse(Strings.paymentDoneAPI),
-  //       body: data,
-  //       headers: {
-  //         "content-type" : "application/json",
-  //         "accept" : "application/json",
-  //         "Authorization" : "Bearer $token"
-  //       }
-  //     );
-  //     debugPrint("PaymentDone ${res.body}");
-  //     congDialog();
-  //   });
-  //
-  // }
 
   void congDialog() async {
     homeController.confettiController.play();
@@ -183,5 +140,59 @@ class StudentPaymentController extends GetxController{
     await Future.delayed(const Duration(seconds: 5));
     homeController.confettiController.stop();
   }
+
+
+// Future<void> paymentStripe() async {
+//
+//
+//   Map<String, dynamic> body = {
+//     "amount" : "199900",
+//     "currency" : "INR",
+//     "receipt_email" : homeController.email.value
+//   };
+//
+//   var res = await http.post(
+//       Uri.parse(Strings.stripeAPI),
+//       body: body,
+//       headers: {
+//         "Authorization" : "Bearer ${Strings.secretStripe}",
+//         "Content-type" : "application/x-www-form-urlencoded"
+//       }
+//   );
+//   paymentIntent = json.decode(res.body);
+//   debugPrint(paymentIntent.toString());
+//
+//   await Stripe.instance.initPaymentSheet(paymentSheetParameters: SetupPaymentSheetParameters(
+//     paymentIntentClientSecret: paymentIntent!["client_secret"],
+//     style: ThemeMode.light,
+//     merchantDisplayName: "Medhasvini Education",
+//     billingDetails: BillingDetails(
+//         email: homeController.email.value,
+//         name: homeController.username.value
+//     ),
+//   )).then((value) => {});
+//
+//   var data = json.encode({
+//     "amount" : 1999,
+//     "referral_code": controllerReferral.text.toString(),
+//     "userid" : int.parse(homeController.id.value.toString())
+//   });
+//
+//   await Stripe.instance.presentPaymentSheet().then((value) async {
+//     var res = await http.post(
+//       Uri.parse(Strings.paymentDoneAPI),
+//       body: data,
+//       headers: {
+//         "content-type" : "application/json",
+//         "accept" : "application/json",
+//         "Authorization" : "Bearer $token"
+//       }
+//     );
+//     debugPrint("PaymentDone ${res.body}");
+//     congDialog();
+//   });
+//
+// }
+
 
 }

@@ -30,6 +30,8 @@ class HomeController extends GetxController{
   RxString referralCommission = "".obs;
   RxString binaryCommission = "".obs;
   RxString pendingCommission = "".obs;
+  RxString totalWithdrawal = "".obs;
+  RxString availableAmount = "".obs;
   RxList<TreeNode> nodes = <TreeNode>[].obs;
   RxString myReferralCode = "".obs;
   RxString isPaidUser = "false".obs;
@@ -163,6 +165,10 @@ class HomeController extends GetxController{
         ), children: getNodes(jsonPaid[0]["children"]))
     );
 
+    updateCommission();
+  }
+
+  void updateCommission() async {
     var res = await http.get(
         Uri.parse(Strings.totalCommissionAPI),
         headers: {
@@ -171,13 +177,20 @@ class HomeController extends GetxController{
     );
     if(res.statusCode == 200){
       var json = jsonDecode(res.body);
-      referralCommission.value = json["direct_amount"];
-      binaryCommission.value = json["binary_amount"];
-      pendingCommission.value = json["pending_commission_amount"];
+      debugPrint(res.body);
+      referralCommission.value = json["direct_amount"].toString();
+      binaryCommission.value = json["binary_amount"].toString();
+      pendingCommission.value = json["pending_commission_amount"].toString();
+      totalWithdrawal.value = json["total_withdrawal_amount"].toString();
+      availableAmount.value = (double.parse(binaryCommission.value) + double.parse(referralCommission.value) - double.parse(totalWithdrawal.value)).toString();
+      debugPrint("Total withdrawal: ${totalWithdrawal.value}");
+
     } else {
-      referralCommission.value = "0";
-      binaryCommission.value = "0";
-      pendingCommission.value = "0";
+      referralCommission.value = "0.0";
+      binaryCommission.value = "0.0";
+      pendingCommission.value = "0.0";
+      totalWithdrawal.value = "0.0";
+      availableAmount.value = "0.0";
     }
   }
 

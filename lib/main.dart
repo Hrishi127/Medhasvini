@@ -1,12 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
-import 'package:medhasvinieducation/Custom/Strings.dart';
 import 'package:medhasvinieducation/Home/home.dart';
 import 'package:medhasvinieducation/SignIn/signin.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:medhasvinieducation/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

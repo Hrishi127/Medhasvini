@@ -2,9 +2,9 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medhasvinieducation/Home/LiveClass/liveclass.dart';
+import 'package:medhasvinieducation/Home/Membership/membership.dart';
 import 'package:medhasvinieducation/Home/PaymentTree/paymenttree.dart';
 import 'package:medhasvinieducation/Home/StudentCourse/studentcourse.dart';
-import 'package:medhasvinieducation/Home/StudentPayment/studentpayment.dart';
 import 'package:medhasvinieducation/Home/homecontroller.dart';
 
 class Home extends StatelessWidget {
@@ -72,7 +72,6 @@ class Home extends StatelessWidget {
                   onPressed: ()  {
                     controller.nodes.clear();
                     controller.getJsonPaid().then((value) => controller.getCommission(value));
-
                   },
                   tooltip: "Refresh",
                   icon: const Icon(Icons.refresh, color: Colors.black)): const Stack(): const Stack(),
@@ -232,8 +231,8 @@ class Home extends StatelessWidget {
                                 controller.changePage(2);
                               },
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                              leading: Icon(Icons.payment_outlined, color: Colors.white.withOpacity(0.7),),
-                              title: Text("Payment", style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 16),),
+                              leading: Icon(Icons.people, color: Colors.white.withOpacity(0.7),),
+                              title: Text("Membership", style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 16),),
                             ),
                           ),
                           ),
@@ -254,7 +253,7 @@ class Home extends StatelessWidget {
                 ? const LiveClass()
                 : (controller.isPaidUser.value=="true") ?
                 const PaymentTree():
-            const StudentPayment()
+            const Membership()
           ),
         ),
         Align(

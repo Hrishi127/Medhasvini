@@ -28,9 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  timeago:
   firebase_core:
   firebase_database:
-  flutter_stripe:
+#  flutter_stripe:
   razorpay_flutter:
   confetti:
   flutter_simple_treeview:

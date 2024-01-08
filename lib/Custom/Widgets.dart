@@ -11,6 +11,43 @@ class Widgets{
     ));
   }
 
+  static void infoDialog(String title, String message){
+    Get.dialog(AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10)
+      ),
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        TextButton(onPressed: (){
+          Get.back();
+        }, child: const Text("Back"))
+      ],
+    ));
+  }
+
+  static Widget tickMessage(String message){
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: [
+          Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100)
+            ),
+            color: Colors.indigo,
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: const Icon(Icons.done, color: Colors.white, size: 12,),
+            )
+          ),
+          const SizedBox(width: 16),
+          Text(message)
+        ],
+      ),
+    );
+  }
+
   static Widget commissionView(String userName, String referralCode){
     return Stack(
       children: [
